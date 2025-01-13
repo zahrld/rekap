@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'dart:io';
 import '../models/catatan_model.dart';
 import '../services/catatan_service.dart';
 
@@ -17,7 +19,10 @@ class _CatatanScreenState extends State<CatatanScreen> {
   final _judulController = TextEditingController();
   final _deskripsiController = TextEditingController();
   final _tempatController = TextEditingController();
+  final List<String> _anggotaList = [];
   final _anggotaController = TextEditingController();
+  DateTime? _selectedDate;
+  File? _imageFile;
   List<Catatan> _catatanList = [];
   bool _isLoading = false;
 
@@ -43,27 +48,26 @@ class _CatatanScreenState extends State<CatatanScreen> {
 
   Future<void> _submitCatatan() async {
     if (_formKey.currentState!.validate()) {
-      final catatan = Catatan(
-        userId: widget.userId,
-        judul: _judulController.text,
-        deskripsi: _deskripsiController.text,
-        tempat: _tempatController.text,
-        anggota: _anggotaController.text,
-      );
-
+      setState(() => _isLoading = true);
       try {
+        final catatan = Catatan(
+          userId: widget.userId,
+          judul: _judulController.text,
+          deskripsi: _deskripsiController.text,
+          tempat: _tempatController.text,
+          tanggal: _selectedDate != null
+              ? DateFormat('yyyy-MM-dd').format(_selectedDate!)
+              : DateFormat('yyyy-MM-dd').format(DateTime.now()),
+          anggota: _anggotaList.join(', '),
+          gambar: _imageFile?.path,
+        );
+
         final success = await _catatanService.createCatatan(catatan);
-        if (success) {
-          _judulController.clear();
-          _deskripsiController.clear();
-          _tempatController.clear();
-          _anggotaController.clear();
-          await _loadCatatan();
-          if (mounted) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('Catatan berhasil disimpan')),
-            );
-          }
+        if (success && mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Catatan berhasil disimpan')),
+          );
+          Navigator.pop(context, true);
         }
       } catch (e) {
         if (mounted) {
@@ -71,6 +75,8 @@ class _CatatanScreenState extends State<CatatanScreen> {
             SnackBar(content: Text('Error: $e')),
           );
         }
+      } finally {
+        setState(() => _isLoading = false);
       }
     }
   }

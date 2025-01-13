@@ -7,6 +7,7 @@ class Catatan {
   final String? anggota;
   final String? gambar;
   final String? createdAt;
+  final String tanggal;
 
   Catatan({
     this.id,
@@ -14,6 +15,7 @@ class Catatan {
     required this.judul,
     this.deskripsi,
     this.tempat,
+    required this.tanggal,
     this.anggota,
     this.gambar,
     this.createdAt,
@@ -29,6 +31,7 @@ class Catatan {
       anggota: json['anggota'],
       gambar: json['gambar'],
       createdAt: json['created_at'],
+      tanggal: json['tanggal'],
     );
   }
 
@@ -42,4 +45,4 @@ class Catatan {
       'gambar': gambar,
     };
   }
-} 
+}

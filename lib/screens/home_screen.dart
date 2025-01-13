@@ -42,7 +42,11 @@ class HomeScreen extends StatelessWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => const AddNoteScreen()),
+                      builder: (context) => AddNoteScreen(
+                        username: user.nama,
+                        userId: int.parse(user.id),
+                      ),
+                    ),
                   );
                 },
               ),
@@ -57,7 +61,8 @@ class HomeScreen extends StatelessWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => const RecapScreen()),
+                        builder: (context) =>
+                            RecapScreen(userId: int.parse(user.id))),
                   );
                 },
               ),

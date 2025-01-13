@@ -92,10 +92,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         ),
                         TextButton(
                           onPressed: () => Navigator.pop(context, true),
-                          child: const Text('Ya, Keluar'),
                           style: TextButton.styleFrom(
                             foregroundColor: Colors.red,
                           ),
+                          child: const Text('Ya, Keluar'),
                         ),
                       ],
                     ),
