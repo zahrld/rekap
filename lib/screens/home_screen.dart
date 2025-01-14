@@ -36,8 +36,8 @@ class HomeScreen extends StatelessWidget {
             Card(
               child: ListTile(
                 leading: const Icon(Icons.add_location, size: 32),
-                title: const Text('Tambah Catatan'),
-                subtitle: const Text('Tambah catatan survei lokasi baru'),
+                title: const Text('Tambah Kegiatan'),
+                subtitle: const Text('Tambah Kegiatan survei lokasi baru'),
                 onTap: () {
                   Navigator.push(
                     context,

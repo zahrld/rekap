@@ -6,7 +6,6 @@ import 'package:flutter/foundation.dart' show kIsWeb;
 import '../config/api_config.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'package:http/http.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:mime/mime.dart';
 
@@ -33,6 +32,18 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
   final List<String> _anggotaList = [];
   final List<dynamic> _imageFiles = [];
   DateTime _selectedDate = DateTime.now();
+
+  // Data user tetap tersimpan tapi tidak ditampilkan
+  late final String _username;
+  late final int _userId;
+
+  @override
+  void initState() {
+    super.initState();
+    // Simpan data user saat inisialisasi
+    _username = widget.username;
+    _userId = widget.userId;
+  }
 
   Future<void> _pickImages() async {
     final ImagePicker picker = ImagePicker();
@@ -94,33 +105,82 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
   }
 
   Widget _buildImagePreview() {
-    if (_imageFiles.isEmpty) {
-      return const Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(Icons.add_photo_alternate, size: 50),
-          Text('Tambah Foto'),
-        ],
-      );
-    }
-
-    return ListView.builder(
-      scrollDirection: Axis.horizontal,
-      itemCount: _imageFiles.length,
-      itemBuilder: (context, index) {
-        final imageFile = _imageFiles[index];
-        if (kIsWeb) {
-          return Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Image.network(imageFile.path),
-          );
-        } else {
-          return Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Image.file(File(imageFile.path)),
-          );
-        }
-      },
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // Grid untuk menampilkan foto yang sudah dipilih
+        if (_imageFiles.isNotEmpty)
+          Container(
+            height: 120,
+            child: GridView.builder(
+              scrollDirection: Axis.horizontal,
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 1,
+                mainAxisSpacing: 8,
+                crossAxisSpacing: 8,
+              ),
+              itemCount: _imageFiles.length,
+              itemBuilder: (context, index) {
+                final imageFile = _imageFiles[index];
+                return Stack(
+                  children: [
+                    Container(
+                      decoration: BoxDecoration(
+                        border: Border.all(color: Colors.grey),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(8),
+                        child: kIsWeb
+                            ? Image.network(
+                                imageFile.path,
+                                fit: BoxFit.cover,
+                              )
+                            : Image.file(
+                                File(imageFile.path),
+                                fit: BoxFit.cover,
+                              ),
+                      ),
+                    ),
+                    Positioned(
+                      top: 4,
+                      right: 4,
+                      child: GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            _imageFiles.removeAt(index);
+                          });
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.all(2),
+                          decoration: const BoxDecoration(
+                            color: Colors.red,
+                            shape: BoxShape.circle,
+                          ),
+                          child: const Icon(
+                            Icons.close,
+                            size: 16,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                );
+              },
+            ),
+          ),
+        const SizedBox(height: 8),
+        // Tombol tambah foto
+        ElevatedButton.icon(
+          onPressed: _pickImages,
+          icon: const Icon(Icons.add_photo_alternate),
+          label: const Text('Tambah Foto'),
+          style: ElevatedButton.styleFrom(
+            minimumSize: const Size(double.infinity, 45),
+          ),
+        ),
+      ],
     );
   }
 
@@ -153,7 +213,7 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
 
         // Data teks
         Map<String, String> fields = {
-          'user_id': widget.userId.toString(),
+          'user_id': _userId.toString(),
           'judul': _judulController.text.trim(),
           'tanggal': DateFormat('yyyy-MM-dd').format(_selectedDate),
           'tempat': _tempatController.text.trim(),
@@ -266,7 +326,7 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Tambah Catatan'),
+        title: const Text('Tambah Kegiatan'),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
@@ -275,41 +335,46 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              TextFormField(
-                initialValue: widget.userId.toString(),
-                enabled: false,
-                decoration: const InputDecoration(
-                  labelText: 'User ID',
-                  border: OutlineInputBorder(),
-                  filled: true,
-                  fillColor: Color(0xFFEEEEEE),
-                ),
-              ),
-              const SizedBox(height: 16),
-              TextFormField(
-                initialValue: widget.username,
-                enabled: false,
-                decoration: const InputDecoration(
-                  labelText: 'Username',
-                  border: OutlineInputBorder(),
-                  filled: true,
-                  fillColor: Color(0xFFEEEEEE),
-                ),
-              ),
-              const SizedBox(height: 16),
-              Center(
-                child: GestureDetector(
-                  onTap: _pickImages,
-                  child: Container(
-                    width: double.infinity,
-                    height: 150,
-                    decoration: BoxDecoration(
-                      border: Border.all(color: Colors.grey),
-                      borderRadius: BorderRadius.circular(10),
+              // Sembunyikan field tapi tetap ada di DOM
+              Visibility(
+                visible: false,
+                maintainState: true,
+                child: Column(
+                  children: [
+                    TextFormField(
+                      initialValue: widget.userId.toString(),
+                      enabled: false,
+                      decoration: const InputDecoration(
+                        labelText: 'User ID',
+                        border: OutlineInputBorder(),
+                        filled: true,
+                        fillColor: Color(0xFFEEEEEE),
+                      ),
                     ),
-                    child: _buildImagePreview(),
-                  ),
+                    const SizedBox(height: 16),
+                    TextFormField(
+                      initialValue: widget.username,
+                      enabled: false,
+                      decoration: const InputDecoration(
+                        labelText: 'Username',
+                        border: OutlineInputBorder(),
+                        filled: true,
+                        fillColor: Color(0xFFEEEEEE),
+                      ),
+                    ),
+                  ],
                 ),
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    'Foto Dokumentasi:',
+                    style: TextStyle(fontSize: 16),
+                  ),
+                  const SizedBox(height: 8),
+                  _buildImagePreview(),
+                ],
               ),
               const SizedBox(height: 16),
               TextFormField(
