@@ -25,7 +25,9 @@ class Activity {
       tempat: json['tempat'],
       deskripsi: json['deskripsi'],
       anggota: json['anggota'],
-      gambar: json['gambar'] != null ? List<String>.from(json['gambar'].split(',')) : [],
+      gambar: json['gambar'] != null
+          ? List<String>.from(json['gambar'].split(','))
+          : [],
     );
   }
 
