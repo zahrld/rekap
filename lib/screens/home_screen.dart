@@ -4,71 +4,326 @@ import 'add_note_screen.dart';
 import 'recap_screen.dart';
 import '../models/user_model.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   final User user;
 
   const HomeScreen({super.key, required this.user});
 
   @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  bool isProfileHovered = false;
+  bool isCatatanHovered = false;
+  bool isRekapHovered = false;
+  bool isKalenderHovered = false;
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Survei Lokasi'),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.person),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => ProfileScreen(user: user),
-                ),
-              );
-            },
-          ),
-        ],
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Card(
-              child: ListTile(
-                leading: const Icon(Icons.add_location, size: 32),
-                title: const Text('Tambah Kegiatan'),
-                subtitle: const Text('Tambah Kegiatan survei lokasi baru'),
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => AddNoteScreen(
-                        username: user.nama,
-                        userId: int.parse(user.id),
+      body: Column(
+        children: [
+          // Bagian atas berwarna biru
+          Container(
+            color: Colors.blue,
+            child: SafeArea(
+              bottom: false,
+              child: Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Container(
+                        padding: const EdgeInsets.all(12),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          border: Border.all(color: Colors.blue[300]!),
+                          borderRadius: BorderRadius.circular(30),
+                        ),
+                        child: Row(
+                          children: [
+                            Text(
+                              'Hi ${widget.user.nama}',
+                              style: const TextStyle(
+                                fontSize: 16,
+                                color: Colors.black87,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
-                  );
-                },
+                    const SizedBox(width: 10),
+                    GestureDetector(
+                      onTapDown: (_) => setState(() => isProfileHovered = true),
+                      onTapUp: (_) => setState(() => isProfileHovered = false),
+                      onTapCancel: () =>
+                          setState(() => isProfileHovered = false),
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                ProfileScreen(user: widget.user),
+                          ),
+                        );
+                      },
+                      child: AnimatedContainer(
+                        duration: const Duration(milliseconds: 200),
+                        decoration: BoxDecoration(
+                          color: isProfileHovered ? Colors.white : Colors.white,
+                          border: Border.all(color: Colors.blue[300]!),
+                          borderRadius: BorderRadius.circular(30),
+                          boxShadow: isProfileHovered
+                              ? [
+                                  BoxShadow(
+                                      color: Colors.blue[100]!, blurRadius: 8)
+                                ]
+                              : null,
+                        ),
+                        child: CircleAvatar(
+                          backgroundColor: Colors.transparent,
+                          radius: 25,
+                          child: Icon(
+                            Icons.person,
+                            color: isProfileHovered
+                                ? Colors.blue[700]
+                                : Colors.blue[300],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
-            const SizedBox(height: 16),
-            Card(
-              child: ListTile(
-                leading: const Icon(Icons.list_alt, size: 32),
-                title: const Text('Rekap Catatan'),
-                subtitle: const Text('Lihat semua catatan survei'),
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) =>
-                            RecapScreen(userId: int.parse(user.id))),
-                  );
-                },
+          ),
+
+          // Konten utama dengan latar belakang putih
+          Expanded(
+            child: Container(
+              color: Colors.white,
+              child: Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: Column(
+                  children: [
+                    // Card untuk jumlah catatan dan menu buttons
+                    Container(
+                      padding: const EdgeInsets.all(20.0),
+                      child: Column(
+                        children: [
+                          // Card untuk jumlah catatan
+                          Container(
+                            width: double.infinity, // Memastikan lebar penuh
+                            padding: const EdgeInsets.symmetric(vertical: 25),
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              border: Border.all(color: Colors.blue[300]!),
+                              borderRadius: BorderRadius.circular(20),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.grey.withOpacity(0.1),
+                                  spreadRadius: 1,
+                                  blurRadius: 5,
+                                ),
+                              ],
+                            ),
+                            child: Column(
+                              children: [
+                                const Text(
+                                  "12",
+                                  style: TextStyle(
+                                    fontSize: 40,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                const Text(
+                                  "Catatan Kegiatan Survei",
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+
+                          const SizedBox(height: 20),
+
+                          // Menu buttons dengan ukuran yang sama
+                          GestureDetector(
+                            onTapDown: (_) =>
+                                setState(() => isCatatanHovered = true),
+                            onTapUp: (_) =>
+                                setState(() => isCatatanHovered = false),
+                            onTapCancel: () =>
+                                setState(() => isCatatanHovered = false),
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => AddNoteScreen(
+                                    username: widget.user.nama,
+                                    userId: int.parse(widget.user.id),
+                                  ),
+                                ),
+                              );
+                            },
+                            child: AnimatedContainer(
+                              duration: const Duration(milliseconds: 200),
+                              width: double.infinity,
+                              padding: const EdgeInsets.symmetric(vertical: 25),
+                              decoration: BoxDecoration(
+                                color: isCatatanHovered
+                                    ? Colors.white
+                                    : Colors.blue[700],
+                                border: Border.all(
+                                  color: isCatatanHovered
+                                      ? Colors.blue[700]!
+                                      : Colors.transparent,
+                                ),
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Icon(
+                                    Icons.add,
+                                    color: isCatatanHovered
+                                        ? Colors.blue[700]
+                                        : Colors.white,
+                                    size: 30,
+                                  ),
+                                  const SizedBox(height: 8),
+                                  Text(
+                                    'Catatan Baru',
+                                    style: TextStyle(
+                                      color: isCatatanHovered
+                                          ? Colors.blue[700]
+                                          : Colors.white,
+                                      fontSize: 18,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+
+                          const SizedBox(height: 20),
+
+                          GestureDetector(
+                            onTapDown: (_) =>
+                                setState(() => isRekapHovered = true),
+                            onTapUp: (_) =>
+                                setState(() => isRekapHovered = false),
+                            onTapCancel: () =>
+                                setState(() => isRekapHovered = false),
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => RecapScreen(
+                                      userId: int.parse(widget.user.id)),
+                                ),
+                              );
+                            },
+                            child: AnimatedContainer(
+                              duration: const Duration(milliseconds: 200),
+                              width: double.infinity,
+                              padding: const EdgeInsets.symmetric(vertical: 25),
+                              decoration: BoxDecoration(
+                                color: isRekapHovered
+                                    ? Colors.white
+                                    : Colors.blue[700],
+                                border: Border.all(
+                                  color: isRekapHovered
+                                      ? Colors.blue[700]!
+                                      : Colors.transparent,
+                                ),
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Icon(
+                                    Icons.refresh,
+                                    color: isRekapHovered
+                                        ? Colors.blue[700]
+                                        : Colors.white,
+                                    size: 30,
+                                  ),
+                                  const SizedBox(height: 8),
+                                  Text(
+                                    'Rekap',
+                                    style: TextStyle(
+                                      color: isRekapHovered
+                                          ? Colors.blue[700]
+                                          : Colors.white,
+                                      fontSize: 18,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+
+                          const SizedBox(height: 20),
+
+                          GestureDetector(
+                            onTapDown: (_) =>
+                                setState(() => isKalenderHovered = true),
+                            onTapUp: (_) =>
+                                setState(() => isKalenderHovered = false),
+                            onTapCancel: () =>
+                                setState(() => isKalenderHovered = false),
+                            child: AnimatedContainer(
+                              duration: const Duration(milliseconds: 200),
+                              width: double.infinity,
+                              padding: const EdgeInsets.symmetric(vertical: 25),
+                              decoration: BoxDecoration(
+                                color: isKalenderHovered
+                                    ? Colors.white
+                                    : Colors.blue[700],
+                                border: Border.all(
+                                  color: isKalenderHovered
+                                      ? Colors.blue[700]!
+                                      : Colors.transparent,
+                                ),
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Icon(
+                                    Icons.calendar_today,
+                                    color: isKalenderHovered
+                                        ? Colors.blue[700]
+                                        : Colors.white,
+                                    size: 30,
+                                  ),
+                                  const SizedBox(height: 8),
+                                  Text(
+                                    'Kalender',
+                                    style: TextStyle(
+                                      color: isKalenderHovered
+                                          ? Colors.blue[700]
+                                          : Colors.white,
+                                      fontSize: 18,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
