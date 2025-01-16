@@ -11,62 +11,53 @@ class CatatanSurvei extends StatefulWidget {
   final int userId;
 
   const CatatanSurvei({
-    Key? key,
+    super.key,
     required this.username,
     required this.userId,
-  }) : super(key: key);
+  });
 
   @override
   State<CatatanSurvei> createState() => _CatatanSurveiState();
 }
 
 class _CatatanSurveiState extends State<CatatanSurvei> {
+  late Future<List<Activity>> futureActivities;
   List<Activity> _activities = [];
   List<Activity> _filteredActivities = [];
   final TextEditingController _searchController = TextEditingController();
-  bool _isLoading = true;
 
   @override
   void initState() {
     super.initState();
-    _loadUserNotes();
+    futureActivities = fetchUserNotes(widget.userId);
+    futureActivities.then((activities) {
+      setState(() {
+        _activities = activities;
+        _filteredActivities = activities;
+      });
+    });
   }
 
-  Future<void> _loadUserNotes() async {
-    setState(() => _isLoading = true);
-    try {
-      final response = await http.get(
-        Uri.parse('${ApiConfig.getCatatan}?user_id=${widget.userId}'),
-      );
+  Future<List<Activity>> fetchUserNotes(int userId) async {
+    final response = await http.get(
+      Uri.parse('${ApiConfig.getUserCatatan}?user_id=$userId'),
+    );
 
-      if (response.statusCode == 200) {
-        List<dynamic> data = json.decode(response.body);
-        setState(() {
-          _activities = data.map((json) => Activity.fromJson(json)).toList();
-          _filteredActivities = _activities;
-          _isLoading = false;
-        });
-      } else {
-        throw Exception('Gagal memuat data');
-      }
-    } catch (e) {
-      setState(() => _isLoading = false);
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error: ${e.toString()}')),
-      );
+    if (response.statusCode == 200) {
+      List<dynamic> data = json.decode(response.body);
+      return data.map((json) => Activity.fromJson(json)).toList();
+    } else {
+      throw Exception('Failed to load activities');
     }
   }
 
   void _filterActivities(String query) {
     final filtered = _activities.where((activity) {
       final titleLower = activity.judul.toLowerCase();
-      final dateFormatted = DateFormat('EEEE, d MMMM yyyy', 'id_ID')
-          .format(activity.tanggal)
-          .toLowerCase();
+      final dateFormatted = DateFormat('EEEE, d MMMM yyyy', 'id_ID').format(activity.tanggal).toLowerCase();
       final searchLower = query.toLowerCase();
 
-      return titleLower.contains(searchLower) ||
-          dateFormatted.contains(searchLower);
+      return titleLower.contains(searchLower) || dateFormatted.contains(searchLower);
     }).toList();
 
     setState(() {
@@ -95,42 +86,47 @@ class _CatatanSurveiState extends State<CatatanSurvei> {
             ),
           ),
           Expanded(
-            child: _isLoading
-                ? const Center(child: CircularProgressIndicator())
-                : _activities.isEmpty
-                    ? const Center(child: Text('Belum ada catatan'))
-                    : ListView.builder(
-                        padding: const EdgeInsets.all(8.0),
-                        itemCount: _filteredActivities.length,
-                        itemBuilder: (context, index) {
-                          final activity = _filteredActivities[index];
-                          final formattedDate =
-                              DateFormat('EEEE, d MMMM yyyy', 'id_ID')
-                                  .format(activity.tanggal);
-
-                          return Card(
-                            child: ListTile(
-                              title: Text(
-                                activity.judul,
-                                style: const TextStyle(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              subtitle: Text(formattedDate),
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => DetailKegiatanScreen(
-                                        activity: activity),
-                                  ),
-                                );
-                              },
+            child: FutureBuilder<List<Activity>>(
+              future: futureActivities,
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(child: CircularProgressIndicator());
+                } else if (snapshot.hasError) {
+                  return Center(child: Text('Error: ${snapshot.error}'));
+                } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                  return const Center(child: Text('Belum ada catatan'));
+                } else {
+                  return ListView.builder(
+                    padding: const EdgeInsets.all(8.0),
+                    itemCount: _filteredActivities.length,
+                    itemBuilder: (context, index) {
+                      final activity = _filteredActivities[index];
+                      final formattedDate = DateFormat('EEEE, d MMMM yyyy', 'id_ID').format(activity.tanggal);
+                      return Card(
+                        child: ListTile(
+                          title: Text(
+                            activity.judul,
+                            style: const TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
                             ),
-                          );
-                        },
-                      ),
+                          ),
+                          subtitle: Text(formattedDate),
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => DetailKegiatanScreen(activity: activity),
+                              ),
+                            );
+                          },
+                        ),
+                      );
+                    },
+                  );
+                }
+              },
+            ),
           ),
         ],
       ),
