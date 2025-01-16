@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
+import '../config/api_config.dart';
 import 'profile_screen.dart';
 import 'add_note_screen.dart';
 import 'recap_screen.dart';
 import '../models/user_model.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'catatan_survei.dart';
+import 'dart:convert';
+import 'dart:io';
+import 'package:http/http.dart' as http;
 
 class HomeScreen extends StatefulWidget {
   final User user;
@@ -20,7 +24,27 @@ class _HomeScreenState extends State<HomeScreen> {
   bool isCatatanHovered = false;
   bool isRekapHovered = false;
   bool isKalenderHovered = false;
+  int noteCount = 0;
 
+  Future<void> _fetchNoteCount() async {
+    try {
+      final response = await http.get(
+        Uri.parse('${ApiConfig.getCountUserCatatan}?user_id=${widget.user.id}'),
+      );
+
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body);
+        print('Data received: $data'); // Debugging log
+        setState(() {
+          noteCount = data['total'];
+        });
+      } else {
+        throw Exception('Failed to load note count');
+      }
+    } catch (e) {
+      print('Error fetching note count: $e');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +53,7 @@ class _HomeScreenState extends State<HomeScreen> {
         children: [
           // Bagian atas berwarna biru
           Container(
-            color: Colors.blue[700],
+            color: Colors.blue,
             child: SafeArea(
               bottom: false,
               child: Padding(
@@ -38,29 +62,26 @@ class _HomeScreenState extends State<HomeScreen> {
                   children: [
                     // Logo SICAP
                     Image.asset(
-                      'lib/images/Sicap_putih.png',
-                      height: 70, // Sesuaikan ukuran sesuai kebutuhan
+                      'lib/images/sicap_putih.png',
+                      height: 40, // Sesuaikan ukuran sesuai kebutuhan
                     ),
                     const SizedBox(width: 10),
 
                     // Hi Username
                     Expanded(
                       child: Container(
-                        padding: const EdgeInsets.all(5),
+                        padding: const EdgeInsets.all(12),
                         decoration: BoxDecoration(
                           color: Colors.white,
-                          border: Border.all(color: Colors.blue[700]!),
-                          borderRadius: BorderRadius.circular(100),
+                          border: Border.all(color: Colors.blue[300]!),
+                          borderRadius: BorderRadius.circular(30),
                         ),
                         child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text(
                               'Hi ${widget.user.nama}',
-                              style: GoogleFonts.dmSerifDisplay(
-                                fontSize: 20,
-                                color: Colors.blue[700],
-                              ),
+                              style: GoogleFonts.poppins(
+                                  fontSize: 20, color: Colors.blue[300]),
                             ),
                           ],
                         ),
@@ -101,7 +122,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             Icons.person,
                             color: isProfileHovered
                                 ? Colors.blue[700]
-                                : Colors.blue[700],
+                                : Colors.blue[300],
                           ),
                         ),
                       ),
@@ -121,27 +142,6 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: Column(
                   children: [
                     // Card untuk jumlah catatan dan menu buttons
-<<<<<<< HEAD
-<<<<<<< HEAD
-                    Container(
-                      padding: const EdgeInsets.all(20.0),
-                      child: Column(
-                        children: [
-                          // Card untuk jumlah catatan
-                          GestureDetector(
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => CatatanSurvei(
-                                    username: widget.user.nama,
-                                    userId: int.parse(widget.user.id),
-                                  ),
-                                ),
-                              );
-                            },
-                            child: Container(
-=======
                     GestureDetector(
                       onTap: () {
                         Navigator.push(
@@ -150,59 +150,6 @@ class _HomeScreenState extends State<HomeScreen> {
                             builder: (context) => CatatanSurvei(
                               username: widget.user.nama,
                               userId: int.parse(widget.user.id),
-                            ),
-                          ),
-                        );
-                      },
-                      child: Container(
-                        padding: const EdgeInsets.all(20.0),
-                        child: Column(
-                          children: [
-                            // Card untuk jumlah catatan
-                            Container(
->>>>>>> 3d3df4da5c37c7dcc86cef2157b8a3d21577c829
-                              width: double.infinity, // Memastikan lebar penuh
-                              padding: const EdgeInsets.symmetric(vertical: 25),
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                border: Border.all(color: Colors.blue[300]!),
-                                borderRadius: BorderRadius.circular(20),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.grey.withOpacity(0.1),
-                                    spreadRadius: 1,
-                                    blurRadius: 5,
-                                  ),
-                                ],
-                              ),
-                              child: Column(
-                                children: [
-                                  const Text(
-                                    "12",
-                                    style: TextStyle(
-                                      fontSize: 40,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  const Text(
-                                    "Catatan Kegiatan Survei",
-                                    style: TextStyle(
-                                      fontSize: 18,
-                                    ),
-                                  ),
-                                ],
-                              ),
-<<<<<<< HEAD
-=======
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => CatatanSurvei(
-                              username: widget.user.nama,
-                              userId: int.parse(widget.user.id),
->>>>>>> 3d3df4da5c37c7dcc86cef2157b8a3d21577c829
                             ),
                           ),
                         );
@@ -229,9 +176,9 @@ class _HomeScreenState extends State<HomeScreen> {
                               ),
                               child: Column(
                                 children: [
-                                  const Text(
-                                    "12",
-                                    style: TextStyle(
+                                  Text(
+                                    "$noteCount",
+                                    style: const TextStyle(
                                       fontSize: 40,
                                       fontWeight: FontWeight.bold,
                                     ),
@@ -244,8 +191,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                   ),
                                 ],
                               ),
-=======
->>>>>>> 3d3df4da5c37c7dcc86cef2157b8a3d21577c829
                             ),
                           ],
                         ),
