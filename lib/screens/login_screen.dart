@@ -82,7 +82,7 @@ class _LoginScreenState extends State<LoginScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Image.asset(
-                'lib/images/sicap_biru.png',
+                'lib/images/Sicap_biru.png',
                 height: 100,
               ),
               const SizedBox(height: 32),
