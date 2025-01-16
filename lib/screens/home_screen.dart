@@ -122,6 +122,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   children: [
                     // Card untuk jumlah catatan dan menu buttons
 <<<<<<< HEAD
+<<<<<<< HEAD
                     Container(
                       padding: const EdgeInsets.all(20.0),
                       child: Column(
@@ -140,6 +141,26 @@ class _HomeScreenState extends State<HomeScreen> {
                               );
                             },
                             child: Container(
+=======
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => CatatanSurvei(
+                              username: widget.user.nama,
+                              userId: int.parse(widget.user.id),
+                            ),
+                          ),
+                        );
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.all(20.0),
+                        child: Column(
+                          children: [
+                            // Card untuk jumlah catatan
+                            Container(
+>>>>>>> 3d3df4da5c37c7dcc86cef2157b8a3d21577c829
                               width: double.infinity, // Memastikan lebar penuh
                               padding: const EdgeInsets.symmetric(vertical: 25),
                               decoration: BoxDecoration(
@@ -171,6 +192,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   ),
                                 ],
                               ),
+<<<<<<< HEAD
 =======
                     GestureDetector(
                       onTap: () {
@@ -222,6 +244,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                   ),
                                 ],
                               ),
+=======
+>>>>>>> 3d3df4da5c37c7dcc86cef2157b8a3d21577c829
                             ),
                           ],
                         ),
