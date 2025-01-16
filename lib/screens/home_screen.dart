@@ -3,6 +3,7 @@ import 'profile_screen.dart';
 import 'add_note_screen.dart';
 import 'recap_screen.dart';
 import '../models/user_model.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class HomeScreen extends StatefulWidget {
   final User user;
@@ -33,6 +34,14 @@ class _HomeScreenState extends State<HomeScreen> {
                 padding: const EdgeInsets.all(20.0),
                 child: Row(
                   children: [
+                    // Logo SICAP
+                    Image.asset(
+                      'lib/images/sicap_putih.png',
+                      height: 40, // Sesuaikan ukuran sesuai kebutuhan
+                    ),
+                    const SizedBox(width: 10),
+
+                    // Hi Username
                     Expanded(
                       child: Container(
                         padding: const EdgeInsets.all(12),
@@ -45,10 +54,8 @@ class _HomeScreenState extends State<HomeScreen> {
                           children: [
                             Text(
                               'Hi ${widget.user.nama}',
-                              style: const TextStyle(
-                                fontSize: 16,
-                                color: Colors.black87,
-                              ),
+                              style: GoogleFonts.poppins(
+                                  fontSize: 20, color: Colors.blue[300]),
                             ),
                           ],
                         ),

@@ -33,41 +33,21 @@ class _LoginScreenState extends State<LoginScreen> {
           setState(() => _isLoading = false);
 
           if (response['success'] == true) {
-            print('Response lengkap: $response');
-            print('Success status: ${response['success']}');
-            print('Data user: ${response['data']}');
+            final userData = response['data'];
+            final user = User(
+              id: userData['id'].toString(),
+              nama: userData['nama'].toString(),
+              email: userData['email'].toString(),
+              noTelepon: userData['no_telepon'].toString(),
+            );
 
-            try {
-              final userData = response['data'];
-              print('User data sebelum konversi: $userData');
-
-              final user = User(
-                id: userData['id'].toString(),
-                nama: userData['nama'].toString(),
-                email: userData['email'].toString(),
-                noTelepon: userData['no_telepon'].toString(),
-              );
-
-              print('User setelah konversi: $user');
-
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => HomeScreen(user: user),
-                ),
-              );
-            } catch (e, stackTrace) {
-              print('Error detail: $e');
-              print('Stack trace: $stackTrace');
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text('Terjadi kesalahan saat memproses data user'),
-                  backgroundColor: Colors.red,
-                ),
-              );
-            }
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => HomeScreen(user: user),
+              ),
+            );
           } else {
-            // Login gagal
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
                 content: Text(response['message'] ?? 'Login gagal'),
@@ -93,9 +73,7 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Login'),
-      ),
+      backgroundColor: Colors.white,
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Form(
@@ -103,6 +81,11 @@ class _LoginScreenState extends State<LoginScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              Image.asset(
+                'lib/images/sicap_biru.png',
+                height: 100,
+              ),
+              const SizedBox(height: 32),
               TextFormField(
                 controller: _emailController,
                 keyboardType: TextInputType.emailAddress,
@@ -170,7 +153,15 @@ class _LoginScreenState extends State<LoginScreen> {
                         builder: (context) => const RegisterScreen()),
                   );
                 },
-                child: const Text('Belum punya akun? Daftar'),
+                child:
+                    const Text('Daftar', style: TextStyle(color: Colors.blue)),
+              ),
+              TextButton(
+                onPressed: () {
+                  // Tambahkan logika untuk lupa password di sini
+                },
+                child: const Text('Lupa Password',
+                    style: TextStyle(color: Colors.blue)),
               ),
             ],
           ),
