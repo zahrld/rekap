@@ -12,5 +12,5 @@ class ApiConfig {
   static const String getCatatan = "$baseUrl/get_catatan.php";
   static const String recapScreen = "$baseUrl/read_catatan.php";
   static const String getUserCatatan = "$baseUrl/get_user_catatan.php";
-  static const String getUserNoteCount = "$baseUrl/get_user_note_count.php";
+  static const String getCountUserCatatan = "$baseUrl/get_count_user_catatan.php";
 }
