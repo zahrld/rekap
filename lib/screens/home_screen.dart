@@ -8,6 +8,7 @@ import 'catatan_survei.dart';
 import 'dart:convert';
 import 'dart:io';
 import 'package:http/http.dart' as http;
+import 'calendar_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   final User user;
@@ -321,6 +322,16 @@ class _HomeScreenState extends State<HomeScreen> {
                       onTapUp: (_) => setState(() => isKalenderHovered = false),
                       onTapCancel: () =>
                           setState(() => isKalenderHovered = false),
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => CalendarScreen(
+                              user: widget.user,
+                            ),
+                          ),
+                        );
+                      },
                       child: AnimatedContainer(
                         duration: const Duration(milliseconds: 200),
                         width: double.infinity,
