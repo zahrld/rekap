@@ -25,13 +25,6 @@ class DetailKegiatanScreen extends StatelessWidget {
               height: 100,
             ),
             const SizedBox(height: 10),
-            const Text(
-              'Sistem Catatan Aktivitas Ponorogo',
-              style: TextStyle(
-                fontSize: 16,
-                color: Colors.black,
-              ),
-            ),
             const SizedBox(height: 20),
             // Gambar dokumentasi
             if (activity.images != null && activity.images!.isNotEmpty)
@@ -64,8 +57,8 @@ class DetailKegiatanScreen extends StatelessWidget {
               width: double.infinity,
               padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
               decoration: BoxDecoration(
-                border: Border.all(color: Colors.grey),
-                borderRadius: BorderRadius.circular(4),
+                border: Border.all(color: const Color(0xFF396BB5)),
+                borderRadius: BorderRadius.circular(5),
               ),
               child: Text(
                 'di unggah oleh ${activity.username}',
@@ -79,8 +72,8 @@ class DetailKegiatanScreen extends StatelessWidget {
               width: double.infinity,
               padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
               decoration: BoxDecoration(
-                border: Border.all(color: Colors.grey),
-                borderRadius: BorderRadius.circular(4),
+                border: Border.all(color: const Color(0xFF396BB5)),
+                borderRadius: BorderRadius.circular(5),
               ),
               child: Text(
                 activity.judul,
@@ -94,8 +87,8 @@ class DetailKegiatanScreen extends StatelessWidget {
               width: double.infinity,
               padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
               decoration: BoxDecoration(
-                border: Border.all(color: Colors.grey),
-                borderRadius: BorderRadius.circular(4),
+                border: Border.all(color: const Color(0xFF396BB5)),
+                borderRadius: BorderRadius.circular(5),
               ),
               child: Text(
                 DateFormat('dd / MM / yyyy').format(activity.tanggal),
@@ -109,8 +102,8 @@ class DetailKegiatanScreen extends StatelessWidget {
               width: double.infinity,
               padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
               decoration: BoxDecoration(
-                border: Border.all(color: Colors.grey),
-                borderRadius: BorderRadius.circular(4),
+                border: Border.all(color: const Color(0xFF396BB5)),
+                borderRadius: BorderRadius.circular(5),
               ),
               child: Text(
                 activity.deskripsi,
@@ -132,8 +125,8 @@ class DetailKegiatanScreen extends StatelessWidget {
                   padding:
                       const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
                   decoration: BoxDecoration(
-                    border: Border.all(color: Colors.grey),
-                    borderRadius: BorderRadius.circular(4),
+                    border: Border.all(color: const Color(0xFF396BB5)),
+                    borderRadius: BorderRadius.circular(5),
                   ),
                   child: Text(
                     activity.tempat,
@@ -157,8 +150,8 @@ class DetailKegiatanScreen extends StatelessWidget {
                   padding:
                       const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
                   decoration: BoxDecoration(
-                    border: Border.all(color: Colors.grey),
-                    borderRadius: BorderRadius.circular(4),
+                    border: Border.all(color: const Color(0xFF396BB5)),
+                    borderRadius: BorderRadius.circular(5),
                   ),
                   child: Text(
                     activity.anggota,
