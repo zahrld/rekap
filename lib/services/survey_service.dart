@@ -37,4 +37,21 @@ class SurveyService {
       return [];
     }
   }
+
+  Future<int> getJumlahCatatan(int userId) async {
+    try {
+      final response = await http.get(
+        Uri.parse('${ApiConfig.baseUrl}/catatan/jumlah/$userId'),
+      );
+
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        return data['jumlah'] ?? 0;
+      }
+      return 0;
+    } catch (e) {
+      print('Error: $e');
+      return 0;
+    }
+  }
 }
