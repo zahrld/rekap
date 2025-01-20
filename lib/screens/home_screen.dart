@@ -34,9 +34,9 @@ class _HomeScreenState extends State<HomeScreen> {
   Future<void> _getJumlahCatatan() async {
     try {
       final response = await http.get(
-        Uri.parse('${ApiConfig.baseUrl}/catatan/jumlah/${widget.user.id}'),
+        Uri.parse('https://api.example.com/catatan/jumlah/${widget.user.id}'),
       );
-      
+
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
         setState(() {
@@ -179,7 +179,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 ],
                               ),
                               child: Column(
-                                children: const [
+                                children: [
                                   Text(
                                     "$jumlahCatatan",
                                     style: TextStyle(
@@ -204,10 +204,8 @@ class _HomeScreenState extends State<HomeScreen> {
                     const SizedBox(height: 20),
                     // Menu buttons dengan ukuran yang sama
                     GestureDetector(
-                      onTapDown: (_) =>
-                          setState(() => isCatatanHovered = true),
-                      onTapUp: (_) =>
-                          setState(() => isCatatanHovered = false),
+                      onTapDown: (_) => setState(() => isCatatanHovered = true),
+                      onTapUp: (_) => setState(() => isCatatanHovered = false),
                       onTapCancel: () =>
                           setState(() => isCatatanHovered = false),
                       onTap: () {
@@ -266,14 +264,13 @@ class _HomeScreenState extends State<HomeScreen> {
                     GestureDetector(
                       onTapDown: (_) => setState(() => isRekapHovered = true),
                       onTapUp: (_) => setState(() => isRekapHovered = false),
-                      onTapCancel: () =>
-                          setState(() => isRekapHovered = false),
+                      onTapCancel: () => setState(() => isRekapHovered = false),
                       onTap: () {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => RecapScreen(
-                                userId: int.parse(widget.user.id)),
+                            builder: (context) =>
+                                RecapScreen(userId: int.parse(widget.user.id)),
                           ),
                         );
                       },
@@ -282,9 +279,8 @@ class _HomeScreenState extends State<HomeScreen> {
                         width: double.infinity,
                         padding: const EdgeInsets.symmetric(vertical: 25),
                         decoration: BoxDecoration(
-                          color: isRekapHovered
-                              ? Colors.white
-                              : Colors.blue[700],
+                          color:
+                              isRekapHovered ? Colors.white : Colors.blue[700],
                           border: Border.all(
                             color: isRekapHovered
                                 ? Colors.blue[700]!
@@ -322,8 +318,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     GestureDetector(
                       onTapDown: (_) =>
                           setState(() => isKalenderHovered = true),
-                      onTapUp: (_) =>
-                          setState(() => isKalenderHovered = false),
+                      onTapUp: (_) => setState(() => isKalenderHovered = false),
                       onTapCancel: () =>
                           setState(() => isKalenderHovered = false),
                       child: AnimatedContainer(
@@ -369,8 +364,9 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
             ),
-          ],
-        ),
-      );
+          ),
+        ],
+      ),
+    );
   }
 }

@@ -326,151 +326,171 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Tambah Kegiatan'),
+        backgroundColor: Colors.white,
+        elevation: 0,
       ),
+      backgroundColor: Colors.white,
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Sembunyikan field tapi tetap ada di DOM
-              Visibility(
-                visible: false,
-                maintainState: true,
-                child: Column(
-                  children: [
-                    TextFormField(
-                      initialValue: widget.userId.toString(),
-                      enabled: false,
-                      decoration: const InputDecoration(
-                        labelText: 'User ID',
-                        border: OutlineInputBorder(),
-                        filled: true,
-                        fillColor: Color(0xFFEEEEEE),
-                      ),
-                    ),
-                    const SizedBox(height: 16),
-                    TextFormField(
-                      initialValue: widget.username,
-                      enabled: false,
-                      decoration: const InputDecoration(
-                        labelText: 'Username',
-                        border: OutlineInputBorder(),
-                        filled: true,
-                        fillColor: Color(0xFFEEEEEE),
-                      ),
-                    ),
-                  ],
-                ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Image.asset(
+              'lib/images/Sicap_biru.png',
+              height: 100,
+            ),
+            const SizedBox(height: 10),
+            const Text(
+              'Tambah Kegiatan',
+              style: TextStyle(
+                fontSize: 16,
+                color: Colors.black,
               ),
-              Column(
+            ),
+            const SizedBox(height: 20),
+            Form(
+              key: _formKey,
+              child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
-                    'Foto Dokumentasi:',
-                    style: TextStyle(fontSize: 16),
-                  ),
-                  const SizedBox(height: 8),
-                  _buildImagePreview(),
-                ],
-              ),
-              const SizedBox(height: 16),
-              TextFormField(
-                controller: _judulController,
-                decoration: const InputDecoration(
-                  labelText: 'Judul Rekapan',
-                  border: OutlineInputBorder(),
-                ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Judul tidak boleh kosong';
-                  }
-                  return null;
-                },
-              ),
-              const SizedBox(height: 16),
-              _buildDatePicker(),
-              const SizedBox(height: 16),
-              TextFormField(
-                controller: _tempatController,
-                decoration: const InputDecoration(
-                  labelText: 'Tempat',
-                  border: OutlineInputBorder(),
-                ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Tempat tidak boleh kosong';
-                  }
-                  return null;
-                },
-              ),
-              const SizedBox(height: 16),
-              TextFormField(
-                controller: _deskripsiController,
-                maxLines: 4,
-                decoration: const InputDecoration(
-                  labelText: 'Deskripsi',
-                  border: OutlineInputBorder(),
-                ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Deskripsi tidak boleh kosong';
-                  }
-                  return null;
-                },
-              ),
-              const SizedBox(height: 16),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text('Daftar Anggota:'),
-                  const SizedBox(height: 8),
-                  ..._anggotaList.map((anggota) => Padding(
-                        padding: const EdgeInsets.only(bottom: 4),
-                        child: Chip(
-                          label: Text(anggota),
-                          onDeleted: () {
-                            setState(() {
-                              _anggotaList.remove(anggota);
-                            });
-                          },
-                        ),
-                      )),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: TextFormField(
-                          controller: _anggotaController,
+                  // Sembunyikan field tapi tetap ada di DOM
+                  Visibility(
+                    visible: false,
+                    maintainState: true,
+                    child: Column(
+                      children: [
+                        TextFormField(
+                          initialValue: widget.userId.toString(),
+                          enabled: false,
                           decoration: const InputDecoration(
-                            labelText: 'Tambah Anggota',
+                            labelText: 'User ID',
                             border: OutlineInputBorder(),
+                            filled: true,
+                            fillColor: Color(0xFFEEEEEE),
                           ),
                         ),
+                        const SizedBox(height: 16),
+                        TextFormField(
+                          initialValue: widget.username,
+                          enabled: false,
+                          decoration: const InputDecoration(
+                            labelText: 'Username',
+                            border: OutlineInputBorder(),
+                            filled: true,
+                            fillColor: Color(0xFFEEEEEE),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        'Foto Dokumentasi:',
+                        style: TextStyle(fontSize: 16),
                       ),
-                      IconButton(
-                        icon: const Icon(Icons.add_circle),
-                        onPressed: _addAnggota,
+                      const SizedBox(height: 8),
+                      _buildImagePreview(),
+                    ],
+                  ),
+                  const SizedBox(height: 16),
+                  TextFormField(
+                    controller: _judulController,
+                    decoration: const InputDecoration(
+                      labelText: 'Judul Rekapan',
+                      border: OutlineInputBorder(),
+                    ),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Judul tidak boleh kosong';
+                      }
+                      return null;
+                    },
+                  ),
+                  const SizedBox(height: 16),
+                  _buildDatePicker(),
+                  const SizedBox(height: 16),
+                  TextFormField(
+                    controller: _tempatController,
+                    decoration: const InputDecoration(
+                      labelText: 'Tempat',
+                      border: OutlineInputBorder(),
+                    ),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Tempat tidak boleh kosong';
+                      }
+                      return null;
+                    },
+                  ),
+                  const SizedBox(height: 16),
+                  TextFormField(
+                    controller: _deskripsiController,
+                    maxLines: 4,
+                    decoration: const InputDecoration(
+                      labelText: 'Deskripsi',
+                      border: OutlineInputBorder(),
+                    ),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Deskripsi tidak boleh kosong';
+                      }
+                      return null;
+                    },
+                  ),
+                  const SizedBox(height: 16),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text('Daftar Anggota:'),
+                      const SizedBox(height: 8),
+                      ..._anggotaList.map((anggota) => Padding(
+                            padding: const EdgeInsets.only(bottom: 4),
+                            child: Chip(
+                              label: Text(anggota),
+                              onDeleted: () {
+                                setState(() {
+                                  _anggotaList.remove(anggota);
+                                });
+                              },
+                            ),
+                          )),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: TextFormField(
+                              controller: _anggotaController,
+                              decoration: const InputDecoration(
+                                labelText: 'Tambah Anggota',
+                                border: OutlineInputBorder(),
+                              ),
+                            ),
+                          ),
+                          IconButton(
+                            icon: const Icon(Icons.add_circle),
+                            onPressed: _addAnggota,
+                          ),
+                        ],
                       ),
                     ],
                   ),
+                  const SizedBox(height: 24),
+                  SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      onPressed: _submitCatatan,
+                      child: const Padding(
+                        padding: EdgeInsets.all(12.0),
+                        child: Text('Simpan Catatan',
+                            style: TextStyle(fontSize: 16)),
+                      ),
+                    ),
+                  ),
                 ],
               ),
-              const SizedBox(height: 24),
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  onPressed: _submitCatatan,
-                  child: const Padding(
-                    padding: EdgeInsets.all(12.0),
-                    child:
-                        Text('Simpan Catatan', style: TextStyle(fontSize: 16)),
-                  ),
-                ),
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

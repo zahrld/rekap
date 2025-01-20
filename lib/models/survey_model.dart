@@ -6,6 +6,8 @@ class Activity {
   final String deskripsi;
   final String anggota;
   final List<String> gambar;
+  final List<String>? images;
+  final String username;
 
   Activity({
     required this.id,
@@ -15,6 +17,8 @@ class Activity {
     required this.deskripsi,
     required this.anggota,
     required this.gambar,
+    this.images,
+    required this.username,
   });
 
   factory Activity.fromJson(Map<String, dynamic> json) {
@@ -28,6 +32,8 @@ class Activity {
       gambar: json['gambar'] != null
           ? List<String>.from(json['gambar'].split(','))
           : [],
+      images: List<String>.from(json['images'] ?? []),
+      username: json['username'] ?? '',
     );
   }
 

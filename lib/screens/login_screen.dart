@@ -39,6 +39,7 @@ class _LoginScreenState extends State<LoginScreen> {
               nama: userData['nama'].toString(),
               email: userData['email'].toString(),
               noTelepon: userData['no_telepon'].toString(),
+              password: userData['password'].toString(),
             );
 
             Navigator.pushReplacement(
@@ -137,31 +138,39 @@ class _LoginScreenState extends State<LoginScreen> {
                 width: double.infinity,
                 child: ElevatedButton(
                   onPressed: _isLoading ? null : _login,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xFF396BB5),
+                  ),
                   child: Padding(
                     padding: const EdgeInsets.all(12.0),
                     child: _isLoading
                         ? const CircularProgressIndicator()
-                        : const Text('Login', style: TextStyle(fontSize: 16)),
+                        : const Text(
+                            'Login',
+                            style: TextStyle(fontSize: 16, color: Colors.white),
+                          ),
                   ),
                 ),
               ),
-              TextButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const RegisterScreen()),
-                  );
-                },
-                child:
-                    const Text('Daftar', style: TextStyle(color: Colors.blue)),
-              ),
-              TextButton(
-                onPressed: () {
-                  // Tambahkan logika untuk lupa password di sini
-                },
-                child: const Text('Lupa Password',
-                    style: TextStyle(color: Colors.blue)),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Text('Belum Punya Akun?'),
+                  TextButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const RegisterScreen(),
+                        ),
+                      );
+                    },
+                    child: const Text(
+                      'Daftar',
+                      style: TextStyle(color: Colors.blue),
+                    ),
+                  ),
+                ],
               ),
             ],
           ),
