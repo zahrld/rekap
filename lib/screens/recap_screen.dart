@@ -2,16 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:intl/intl.dart';
+import 'package:rekap_kominfo/models/user_model.dart';
 import '../config/api_config.dart';
 import '../models/survey_model.dart';
 import 'detail_kegiatan_screen.dart';
 
 class RecapScreen extends StatefulWidget {
   final int userId;
+  final User user;
 
   const RecapScreen({
     super.key,
     required this.userId,
+    required this.user,
   });
 
   @override
@@ -52,10 +55,13 @@ class _RecapScreenState extends State<RecapScreen> {
   void _filterActivities(String query) {
     final filtered = _activities.where((activity) {
       final titleLower = activity.judul.toLowerCase();
-      final dateFormatted = DateFormat('EEEE, d MMMM yyyy', 'id_ID').format(activity.tanggal).toLowerCase();
+      final dateFormatted = DateFormat('EEEE, d MMMM yyyy', 'id_ID')
+          .format(activity.tanggal)
+          .toLowerCase();
       final searchLower = query.toLowerCase();
 
-      return titleLower.contains(searchLower) || dateFormatted.contains(searchLower);
+      return titleLower.contains(searchLower) ||
+          dateFormatted.contains(searchLower);
     }).toList();
 
     setState(() {
@@ -135,7 +141,9 @@ class _RecapScreenState extends State<RecapScreen> {
                     itemCount: _filteredActivities.length,
                     itemBuilder: (context, index) {
                       final activity = _filteredActivities[index];
-                      final formattedDate = DateFormat('EEEE, d MMMM yyyy', 'id_ID').format(activity.tanggal);
+                      final formattedDate =
+                          DateFormat('EEEE, d MMMM yyyy', 'id_ID')
+                              .format(activity.tanggal);
                       return Card(
                         child: ListTile(
                           title: Text(
@@ -156,7 +164,10 @@ class _RecapScreenState extends State<RecapScreen> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => DetailKegiatanScreen(activity: activity),
+                                builder: (context) => DetailKegiatanScreen(
+                                  activity: activity,
+                                  user: widget.user,
+                                ),
                               ),
                             );
                           },

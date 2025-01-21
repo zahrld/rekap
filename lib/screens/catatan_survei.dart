@@ -5,15 +5,18 @@ import 'package:intl/intl.dart';
 import '../config/api_config.dart';
 import '../models/survey_model.dart';
 import 'detail_kegiatan_screen.dart';
+import '../models/user_model.dart';
 
 class CatatanSurvei extends StatefulWidget {
   final String username;
   final int userId;
+  final User user;
 
   const CatatanSurvei({
     super.key,
     required this.username,
     required this.userId,
+    required this.user,
   });
 
   @override
@@ -54,10 +57,13 @@ class _CatatanSurveiState extends State<CatatanSurvei> {
   void _filterActivities(String query) {
     final filtered = _activities.where((activity) {
       final titleLower = activity.judul.toLowerCase();
-      final dateFormatted = DateFormat('EEEE, d MMMM yyyy', 'id_ID').format(activity.tanggal).toLowerCase();
+      final dateFormatted = DateFormat('EEEE, d MMMM yyyy', 'id_ID')
+          .format(activity.tanggal)
+          .toLowerCase();
       final searchLower = query.toLowerCase();
 
-      return titleLower.contains(searchLower) || dateFormatted.contains(searchLower);
+      return titleLower.contains(searchLower) ||
+          dateFormatted.contains(searchLower);
     }).toList();
 
     setState(() {
@@ -101,7 +107,9 @@ class _CatatanSurveiState extends State<CatatanSurvei> {
                     itemCount: _filteredActivities.length,
                     itemBuilder: (context, index) {
                       final activity = _filteredActivities[index];
-                      final formattedDate = DateFormat('EEEE, d MMMM yyyy', 'id_ID').format(activity.tanggal);
+                      final formattedDate =
+                          DateFormat('EEEE, d MMMM yyyy', 'id_ID')
+                              .format(activity.tanggal);
                       return Card(
                         child: ListTile(
                           title: Text(
@@ -116,7 +124,10 @@ class _CatatanSurveiState extends State<CatatanSurvei> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => DetailKegiatanScreen(activity: activity),
+                                builder: (context) => DetailKegiatanScreen(
+                                  activity: activity,
+                                  user: widget.user,
+                                ),
                               ),
                             );
                           },

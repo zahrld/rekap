@@ -156,6 +156,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             builder: (context) => CatatanSurvei(
                               username: widget.user.nama,
                               userId: int.parse(widget.user.id),
+                              user: widget.user,
                             ),
                           ),
                         );
@@ -270,8 +271,10 @@ class _HomeScreenState extends State<HomeScreen> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) =>
-                                RecapScreen(userId: int.parse(widget.user.id)),
+                            builder: (context) => RecapScreen(
+                              userId: int.parse(widget.user.id),
+                              user: widget.user,
+                            ),
                           ),
                         );
                       },
