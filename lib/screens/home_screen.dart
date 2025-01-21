@@ -9,6 +9,8 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'calendar_screen.dart';
+import '../services/survey_service.dart';
+import '../config/api_config.dart';
 
 class HomeScreen extends StatefulWidget {
   final User user;
@@ -25,6 +27,7 @@ class _HomeScreenState extends State<HomeScreen> {
   bool isRekapHovered = false;
   bool isKalenderHovered = false;
   int jumlahCatatan = 0;
+  final SurveyService _surveyService = SurveyService();
 
   @override
   void initState() {
@@ -34,18 +37,19 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Future<void> _getJumlahCatatan() async {
     try {
-      final response = await http.get(
-        Uri.parse('https://api.example.com/catatan/jumlah/${widget.user.id}'),
-      );
-
-      if (response.statusCode == 200) {
-        final data = jsonDecode(response.body);
-        setState(() {
-          jumlahCatatan = data['jumlah'] ?? 0;
-        });
-      }
+      final jumlah = await _surveyService.getJumlahCatatan(int.parse(widget.user.id));
+      setState(() {
+        jumlahCatatan = jumlah;
+      });
+      print('Jumlah catatan diupdate: $jumlahCatatan'); // Debug log
     } catch (e) {
       print('Error getting jumlah catatan: $e');
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Gagal memuat jumlah catatan'),
+          backgroundColor: Colors.red,
+        ),
+      );
     }
   }
 
