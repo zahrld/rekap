@@ -3,6 +3,7 @@ import '../models/user_model.dart';
 import '../models/survey_model.dart';
 import '../services/survey_service.dart';
 import 'package:intl/intl.dart';
+import 'detail_kegiatan_screen.dart';
 
 class CalendarScreen extends StatefulWidget {
   final User user;
@@ -21,6 +22,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
   Map<String, bool> noteExist = {};
   final SurveyService _surveyService = SurveyService();
   List<Activity> activities = [];
+  bool isHovered = false;
 
   @override
   void initState() {
@@ -34,9 +36,9 @@ class _CalendarScreenState extends State<CalendarScreen> {
 
   Future<void> _loadActivities() async {
     try {
-      final surveys = await _surveyService.getSurveys();
+      final userCatatan = await _surveyService.getUserCatatan(int.parse(widget.user.id));
       setState(() {
-        activities = surveys;
+        activities = userCatatan;
         noteExist.clear();
         for (var activity in activities) {
           String dateKey = '${activity.tanggal.day}-${activity.tanggal.month}-${activity.tanggal.year}';
@@ -90,6 +92,88 @@ class _CalendarScreenState extends State<CalendarScreen> {
     return days;
   }
 
+  void _showCatatanList(DateTime date) async {
+    final catatanList = activities.where((activity) {
+      return activity.tanggal.year == date.year &&
+             activity.tanggal.month == date.month &&
+             activity.tanggal.day == date.day;
+    }).toList();
+
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text('Catatan pada ${DateFormat('dd MMMM yyyy').format(date)}'),
+          content: catatanList.isNotEmpty
+              ? Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: catatanList.map((activity) {
+                    return MouseRegion(
+                      onEnter: (_) => setState(() => isHovered = true),
+                      onExit: (_) => setState(() => isHovered = false),
+                      child: AnimatedContainer(
+                        duration: const Duration(milliseconds: 200),
+                        decoration: BoxDecoration(
+                          color: isHovered ? Colors.blue.withOpacity(0.1) : Colors.transparent,
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: ListTile(
+                          title: Text(
+                            activity.judul,
+                            style: TextStyle(
+                              color: isHovered ? Colors.blue : Colors.black,
+                              fontWeight: isHovered ? FontWeight.bold : FontWeight.normal,
+                            ),
+                          ),
+                          subtitle: Text(activity.deskripsi),
+                          onTap: () {
+                            Navigator.pop(context);
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => DetailKegiatanScreen(
+                                  activity: activity,
+                                  user: widget.user,
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                    );
+                  }).toList(),
+                )
+              : const Text('Tidak ada catatan pada tanggal ini.'),
+          actions: [
+            MouseRegion(
+              onEnter: (_) => setState(() => isHovered = true),
+              onExit: (_) => setState(() => isHovered = false),
+              child: TextButton(
+                style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.resolveWith<Color>(
+                    (Set<MaterialState> states) {
+                      if (states.contains(MaterialState.hovered)) {
+                        return Colors.blue.withOpacity(0.1);
+                      }
+                      return Colors.transparent;
+                    },
+                  ),
+                ),
+                onPressed: () => Navigator.pop(context),
+                child: Text(
+                  'Tutup',
+                  style: TextStyle(
+                    color: isHovered ? Colors.blue : Colors.black,
+                  ),
+                ),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -121,9 +205,16 @@ class _CalendarScreenState extends State<CalendarScreen> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  IconButton(
-                    icon: const Icon(Icons.arrow_back),
-                    onPressed: () => _changeMonth(-1),
+                  MouseRegion(
+                    onEnter: (_) => setState(() => isHovered = true),
+                    onExit: (_) => setState(() => isHovered = false),
+                    child: IconButton(
+                      icon: Icon(
+                        Icons.arrow_back,
+                        color: isHovered ? Colors.blue : Colors.black,
+                      ),
+                      onPressed: () => _changeMonth(-1),
+                    ),
                   ),
                   Text(
                     '${DateFormat('MMMM').format(DateTime(_currentYear, _currentMonth))}-$_currentYear',
@@ -178,10 +269,8 @@ class _CalendarScreenState extends State<CalendarScreen> {
 
                     return GestureDetector(
                       onTap: () {
-                        if (isCurrentMonth) {
-                          setState(() {
-                            _selectedDay = day;
-                          });
+                        if (isCurrentMonth && hasActivity) {
+                          _showCatatanList(currentDate);
                         }
                       },
                       child: Container(

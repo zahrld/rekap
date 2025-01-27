@@ -66,4 +66,20 @@ class SurveyService {
       return 0;
     }
   }
+
+  Future<List<Activity>> getUserCatatan(int userId) async {
+    try {
+      final url = '${ApiConfig.getUserCatatan}?user_id=$userId';
+      final response = await http.get(Uri.parse(url));
+
+      if (response.statusCode == 200) {
+        List<dynamic> data = json.decode(response.body);
+        return data.map((json) => Activity.fromJson(json)).toList();
+      }
+      return [];
+    } catch (e) {
+      print('Error fetching user catatan: $e');
+      return [];
+    }
+  }
 }

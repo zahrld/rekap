@@ -31,7 +31,7 @@ class DetailKegiatanScreen extends StatelessWidget {
             // Header dengan logo
             Center(
               child: Image.asset(
-                'lib/images/Sicap_biru.png',
+              'lib/images/Sicap_biru.png',
                 height: 80,
               ),
             ),
@@ -165,12 +165,12 @@ class DetailKegiatanScreen extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(height: 8),
-                      Container(
+            Container(
                         padding: const EdgeInsets.all(12),
-                        decoration: BoxDecoration(
+              decoration: BoxDecoration(
                           color: Colors.blue[50],
                           borderRadius: BorderRadius.circular(8),
-                          border: Border.all(color: const Color(0xFF396BB5)),
+                border: Border.all(color: const Color(0xFF396BB5)),
                         ),
                         child: Row(
                           children: [
@@ -181,9 +181,9 @@ class DetailKegiatanScreen extends StatelessWidget {
                             ),
                             const SizedBox(width: 8),
                             Expanded(
-                              child: Text(
+              child: Text(
                                 activity.tempat,
-                                style: const TextStyle(fontSize: 14),
+                style: const TextStyle(fontSize: 14),
                                 overflow: TextOverflow.ellipsis,
                               ),
                             ),
@@ -247,6 +247,7 @@ class DetailKegiatanScreen extends StatelessWidget {
             ),
             const SizedBox(height: 20),
 
+
             // Info pembuat catatan
             Container(
               width: double.infinity,
@@ -257,7 +258,7 @@ class DetailKegiatanScreen extends StatelessWidget {
               ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: [
+              children: [
                   const Icon(Icons.person, size: 16, color: Colors.grey),
                   const SizedBox(width: 8),
                   Text(
@@ -265,10 +266,10 @@ class DetailKegiatanScreen extends StatelessWidget {
                     style: const TextStyle(
                       fontSize: 14,
                       color: Colors.grey,
-                    ),
                   ),
-                ],
-              ),
+                ),
+              ],
+            ),
             ),
           ],
         ),

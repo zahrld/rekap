@@ -131,6 +131,20 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   ),
                   const SizedBox(height: 16),
                   TextFormField(
+                    controller: _noTeleponController,
+                    decoration: const InputDecoration(
+                      labelText: 'Masukan No Telepon',
+                      border: OutlineInputBorder(),
+                    ),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                          return 'Mohon masukkan no telepon';
+                      }
+                      return null;
+                    },
+                ),
+                  const SizedBox(height: 16),
+                  TextFormField(
                     controller: _passwordController,
                     decoration: InputDecoration(
                       labelText: 'Masukan Password',
