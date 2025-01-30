@@ -161,40 +161,34 @@ class _HomeScreenState extends State<HomeScreen> {
                         );
                       },
                       child: Container(
-                        padding: const EdgeInsets.all(20.0),
+                        width: double.infinity,
+                        padding: const EdgeInsets.symmetric(vertical: 25),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          border: Border.all(color: Colors.blue[300]!),
+                          borderRadius: BorderRadius.circular(20),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey.withOpacity(0.1),
+                              spreadRadius: 1,
+                              blurRadius: 5,
+                            ),
+                          ],
+                        ),
                         child: Column(
                           children: [
-                            Container(
-                              width: double.infinity,
-                              padding: const EdgeInsets.symmetric(vertical: 25),
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                border: Border.all(color: Colors.blue[300]!),
-                                borderRadius: BorderRadius.circular(20),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.grey.withOpacity(0.1),
-                                    spreadRadius: 1,
-                                    blurRadius: 5,
-                                  ),
-                                ],
-                              ),
-                              child: Column(
-                                children: [
-                                  Text(
-                                    "$jumlahCatatan",
-                                    style: TextStyle(
-                                      fontSize: 40,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  Text(
-                                    "Catatan Kegiatan Survei",
-                                    style: TextStyle(
-                                      fontSize: 18,
-                                    ),
-                                  ),
-                                ],
+                            Icon(
+                              Icons.book,
+                              color: Colors.blue[700],
+                              size: 30,
+                            ),
+                            const SizedBox(height: 8),
+                            Text(
+                              "Catatan Saya",
+                              style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.blue[700],
                               ),
                             ),
                           ],
@@ -270,8 +264,9 @@ class _HomeScreenState extends State<HomeScreen> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) =>
-                                RecapScreen(userId: int.parse(widget.user.id), user: widget.user),
+                            builder: (context) => RecapScreen(
+                                userId: int.parse(widget.user.id),
+                                user: widget.user),
                           ),
                         );
                       },

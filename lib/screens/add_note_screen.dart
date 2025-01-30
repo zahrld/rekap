@@ -206,6 +206,12 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
   }
 
   Future<void> _submitCatatan() async {
+    // Tambahkan anggota yang ada di field ke daftar anggota
+    if (_anggotaController.text.isNotEmpty) {
+      _anggotaList.add(_anggotaController.text.trim());
+      _anggotaController.clear(); // Kosongkan field setelah ditambahkan
+    }
+
     if (_formKey.currentState!.validate()) {
       try {
         var request =
@@ -465,6 +471,8 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
                                 labelText: 'Tambah Anggota',
                                 border: OutlineInputBorder(),
                               ),
+                              onEditingComplete: _addAnggota,
+                              onFieldSubmitted: (_) => _addAnggota(),
                             ),
                           ),
                           IconButton(
