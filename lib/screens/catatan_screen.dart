@@ -60,6 +60,7 @@ class _CatatanScreenState extends State<CatatanScreen> {
               : DateFormat('yyyy-MM-dd').format(DateTime.now()),
           anggota: _anggotaList.join(', '),
           gambar: _imageFile?.path,
+          penulis: widget.username,
         );
 
         final success = await _catatanService.createCatatan(catatan);
