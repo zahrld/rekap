@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:rekap_kominfo/screens/dokumentasi_screen.dart';
 import '../models/survey_model.dart';
 import 'package:intl/intl.dart';
 import '../models/user_model.dart';
@@ -62,132 +63,111 @@ class DetailKegiatanScreen extends StatelessWidget {
             ),
             const SizedBox(height: 20),
 
-            // Dokumentasi Foto
-            if (activity.images != null && activity.images!.isNotEmpty) ...[
-              const Text(
-                'Dokumentasi:',
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                  color: Color(0xFF396BB5),
-                ),
-              ),
-              const SizedBox(height: 8),
-              Container(
-                height: 200,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(8),
-                  border: Border.all(color: const Color(0xFF396BB5)),
-                ),
-                child: ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: activity.images!.length,
-                  itemBuilder: (context, index) {
-                    return Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(8),
-                        child: Image.network(
-                          activity.images![index],
-                          fit: BoxFit.cover,
-                          width: 250,
-                          errorBuilder: (context, error, stackTrace) {
-                            return Container(
-                              width: 250,
-                              color: Colors.grey[200],
-                              child: const Center(
-                                child: Icon(Icons.error),
-                              ),
-                            );
-                          },
-                        ),
+// Tombol Dokumentasi
+            Center(
+              child: ElevatedButton.icon(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => DokumentasiScreen(
+                        images: activity.images ?? [], // Kirim empty list jika null
                       ),
-                    );
-                  },
+                    ),
+                  );
+                },
+                icon: const Icon(Icons.photo_library, color: Colors.white),
+                label: const Text(
+                  'Lihat Dokumentasi',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 16,
+                  ),
+                ),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xFF396BB5),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 24,
+                    vertical: 12,
+                  ),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
                 ),
               ),
-              const SizedBox(height: 20),
-            ],
+            ),
+            const SizedBox(height: 20),
 
             // Informasi Waktu dan Tempat
-            Row(
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                // Tanggal
+                const Text(
+                  'Tanggal:',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: Color(0xFF396BB5),
+                  ),
+                ),
+                const SizedBox(height: 8),
+                Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    color: Colors.blue[50],
+                    borderRadius: BorderRadius.circular(8),
+                    border: Border.all(color: const Color(0xFF396BB5)),
+                  ),
+                  child: Row(
                     children: [
-                      const Text(
-                        'Tanggal:',
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                          color: Color(0xFF396BB5),
-                        ),
+                      const Icon(
+                        Icons.calendar_today,
+                        color: Color(0xFF396BB5),
+                        size: 20,
                       ),
-                      const SizedBox(height: 8),
-                      Container(
-                        padding: const EdgeInsets.all(12),
-                        decoration: BoxDecoration(
-                          color: Colors.blue[50],
-                          borderRadius: BorderRadius.circular(8),
-                          border: Border.all(color: const Color(0xFF396BB5)),
-                        ),
-                        child: Row(
-                          children: [
-                            const Icon(
-                              Icons.calendar_today,
-                              color: Color(0xFF396BB5),
-                              size: 20,
-                            ),
-                            const SizedBox(width: 8),
-                            Text(
-                              DateFormat('dd MMMM yyyy')
-                                  .format(activity.tanggal),
-                              style: const TextStyle(fontSize: 14),
-                            ),
-                          ],
-                        ),
+                      const SizedBox(width: 8),
+                      Text(
+                        DateFormat('dd MMMM yyyy').format(activity.tanggal),
+                        style: const TextStyle(fontSize: 14),
                       ),
                     ],
                   ),
                 ),
-                const SizedBox(width: 16),
-                Expanded(
-                  child: Column(
+                const SizedBox(height: 16),
+
+                // Lokasi
+                const Text(
+                  'Lokasi:',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: Color(0xFF396BB5),
+                  ),
+                ),
+                const SizedBox(height: 8),
+                Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    color: Colors.blue[50],
+                    borderRadius: BorderRadius.circular(8),
+                    border: Border.all(color: const Color(0xFF396BB5)),
+                  ),
+                  child: Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text(
-                        'Lokasi:',
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                          color: Color(0xFF396BB5),
-                        ),
+                      const Icon(
+                        Icons.location_on,
+                        color: Color(0xFF396BB5),
+                        size: 20,
                       ),
-                      const SizedBox(height: 8),
-            Container(
-                        padding: const EdgeInsets.all(12),
-              decoration: BoxDecoration(
-                          color: Colors.blue[50],
-                          borderRadius: BorderRadius.circular(8),
-                border: Border.all(color: const Color(0xFF396BB5)),
-                        ),
-                        child: Row(
-                          children: [
-                            const Icon(
-                              Icons.location_on,
-                              color: Color(0xFF396BB5),
-                              size: 20,
-                            ),
-                            const SizedBox(width: 8),
-                            Expanded(
-              child: Text(
-                                activity.tempat,
-                style: const TextStyle(fontSize: 14),
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            ),
-                          ],
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: Text(
+                          activity.tempat,
+                          style: const TextStyle(fontSize: 14),
                         ),
                       ),
                     ],
