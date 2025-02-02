@@ -3,6 +3,7 @@ import 'package:rekap_kominfo/screens/dokumentasi_screen.dart';
 import '../models/survey_model.dart';
 import 'package:intl/intl.dart';
 import '../models/user_model.dart';
+import 'dart:convert';
 
 class DetailKegiatanScreen extends StatelessWidget {
   final Activity activity;
@@ -13,6 +14,7 @@ class DetailKegiatanScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print('Debug - Nama User: ${activity.namaUser}');
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -32,7 +34,7 @@ class DetailKegiatanScreen extends StatelessWidget {
             // Header dengan logo
             Center(
               child: Image.asset(
-              'lib/images/Sicap_biru.png',
+                'lib/images/Sicap_biru.png',
                 height: 80,
               ),
             ),
@@ -71,7 +73,8 @@ class DetailKegiatanScreen extends StatelessWidget {
                     context,
                     MaterialPageRoute(
                       builder: (context) => DokumentasiScreen(
-                        images: activity.images ?? [], // Kirim empty list jika null
+                        images:
+                            activity.images ?? [], // Kirim empty list jika null
                       ),
                     ),
                   );
@@ -227,7 +230,6 @@ class DetailKegiatanScreen extends StatelessWidget {
             ),
             const SizedBox(height: 20),
 
-
             // Info pembuat catatan
             Container(
               width: double.infinity,
@@ -235,21 +237,22 @@ class DetailKegiatanScreen extends StatelessWidget {
               decoration: BoxDecoration(
                 color: Colors.grey[100],
                 borderRadius: BorderRadius.circular(8),
+                border: Border.all(color: const Color(0xFF396BB5)),
               ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                  const Icon(Icons.person, size: 16, color: Colors.grey),
+                children: [
+                  const Icon(Icons.person, size: 16, color: Color(0xFF396BB5)),
                   const SizedBox(width: 8),
                   Text(
-                    'Dibuat oleh ${user.nama}',
+                    'Dibuat oleh: ${activity.namaUser}',
                     style: const TextStyle(
                       fontSize: 14,
-                      color: Colors.grey,
+                      color: Color(0xFF396BB5),
+                    ),
                   ),
-                ),
-              ],
-            ),
+                ],
+              ),
             ),
           ],
         ),

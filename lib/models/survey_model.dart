@@ -6,8 +6,8 @@ class Activity {
   final String deskripsi;
   final String anggota;
   final List<String> gambar;
-  final List<String>? images;
-  final String username;
+  final dynamic images;
+  final String namaUser;
 
   Activity({
     required this.id,
@@ -18,22 +18,22 @@ class Activity {
     required this.anggota,
     required this.gambar,
     this.images,
-    required this.username,
+    required this.namaUser,
   });
 
   factory Activity.fromJson(Map<String, dynamic> json) {
     return Activity(
       id: json['id'],
-      judul: json['judul'],
+      judul: json['judul'] ?? '',
       tanggal: DateTime.parse(json['tanggal']),
-      tempat: json['tempat'],
-      deskripsi: json['deskripsi'],
-      anggota: json['anggota'],
+      tempat: json['tempat'] ?? '',
+      deskripsi: json['deskripsi'] ?? '',
+      anggota: json['anggota'] ?? '',
       gambar: json['gambar'] != null
           ? List<String>.from(json['gambar'].split(','))
           : [],
-      images: List<String>.from(json['images'] ?? []),
-      username: json['username'] ?? '',
+      images: json['gambar'],
+      namaUser: json['nama_user'] ?? '',
     );
   }
 

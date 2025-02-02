@@ -6,8 +6,10 @@ import '../services/catatan_service.dart';
 
 class CatatanScreen extends StatefulWidget {
   final int userId;
+  final String username;
 
-  const CatatanScreen({super.key, required this.userId});
+  const CatatanScreen(
+      {super.key, required this.userId, required this.username});
 
   @override
   State<CatatanScreen> createState() => _CatatanScreenState();
@@ -141,6 +143,32 @@ class _CatatanScreenState extends State<CatatanScreen> {
                             subtitle: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
+                                Row(
+                                  children: [
+                                    const Icon(Icons.person,
+                                        size: 14, color: Colors.grey),
+                                    const SizedBox(width: 4),
+                                    Text(
+                                      'Dibuat oleh ${catatan.penulis}',
+                                      style: const TextStyle(
+                                        fontSize: 12,
+                                        color: Color(0xFF396BB5),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(height: 4),
+                                Row(
+                                  children: [
+                                    const Icon(Icons.calendar_today,
+                                        size: 14, color: Colors.grey),
+                                    const SizedBox(width: 4),
+                                    Text(
+                                      'Tanggal: ${catatan.tanggal}',
+                                      style: const TextStyle(fontSize: 12),
+                                    ),
+                                  ],
+                                ),
                                 if (catatan.deskripsi != null)
                                   Text(catatan.deskripsi!),
                                 if (catatan.tempat != null)
@@ -149,8 +177,6 @@ class _CatatanScreenState extends State<CatatanScreen> {
                                   Text('Anggota: ${catatan.anggota}'),
                               ],
                             ),
-                            trailing:
-                                Text(catatan.createdAt?.split('T')[0] ?? ''),
                           ),
                         );
                       },

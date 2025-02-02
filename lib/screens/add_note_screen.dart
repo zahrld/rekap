@@ -8,6 +8,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:http_parser/http_parser.dart';
 import 'package:mime/mime.dart';
+import '../models/catatan_model.dart';
 
 class AddNoteScreen extends StatefulWidget {
   final String username;
@@ -226,6 +227,7 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
           'deskripsi': _deskripsiController.text.trim(),
           'anggota': _anggotaList.isEmpty ? '-' : _anggotaList.join(', '),
           'status': '1',
+          'nama_user': widget.username,
         };
 
         request.fields.addAll(fields);
@@ -359,36 +361,23 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Sembunyikan field tapi tetap ada di DOM
-                  Visibility(
-                    visible: false,
-                    maintainState: true,
-                    child: Column(
-                      children: [
-                        TextFormField(
-                          initialValue: widget.userId.toString(),
-                          enabled: false,
-                          decoration: const InputDecoration(
-                            labelText: 'User ID',
-                            border: OutlineInputBorder(),
-                            filled: true,
-                            fillColor: Color(0xFFEEEEEE),
-                          ),
-                        ),
-                        const SizedBox(height: 16),
-                        TextFormField(
-                          initialValue: widget.username,
-                          enabled: false,
-                          decoration: const InputDecoration(
-                            labelText: 'Username',
-                            border: OutlineInputBorder(),
-                            filled: true,
-                            fillColor: Color(0xFFEEEEEE),
-                          ),
-                        ),
-                      ],
+                  // Username field (readonly/disabled)
+                  TextFormField(
+                    initialValue: widget.username,
+                    enabled: false, // Tidak bisa diedit
+                    decoration: InputDecoration(
+                      labelText: 'Author',
+                      border: const OutlineInputBorder(),
+                      filled: true,
+                      fillColor: Colors.white, // Warna sama dengan field lain
+                      suffixIcon: const Icon(
+                        Icons.lock_outline, // Icon gembok
+                        color: Color(0xFF396BB5),
+                        size: 20,
+                      ),
                     ),
                   ),
+                  const SizedBox(height: 16),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [

@@ -8,6 +8,7 @@ class Catatan {
   final String? gambar;
   final String? createdAt;
   final String tanggal;
+  final String penulis;
 
   Catatan({
     this.id,
@@ -19,6 +20,7 @@ class Catatan {
     this.anggota,
     this.gambar,
     this.createdAt,
+    required this.penulis,
   });
 
   factory Catatan.fromJson(Map<String, dynamic> json) {
@@ -32,6 +34,7 @@ class Catatan {
       gambar: json['gambar'],
       createdAt: json['created_at'],
       tanggal: json['tanggal'],
+      penulis: json['penulis'],
     );
   }
 
@@ -43,6 +46,7 @@ class Catatan {
       'tempat': tempat,
       'anggota': anggota,
       'gambar': gambar,
+      'penulis': penulis,
     };
   }
 }
