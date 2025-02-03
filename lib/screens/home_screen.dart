@@ -108,13 +108,13 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                             child: CircleAvatar(
                               backgroundColor: Colors.transparent,
-                              radius: 100, // Memperbesar radius
+                              radius: 30, // Memperbesar radius
                               child: Icon(
                                 Icons.person,
                                 color: isProfileHovered
                                     ? Colors.blue[700]
                                     : Colors.blue[700],
-                                size: 80, // Memperbesar ukuran icon
+                                size: 30, // Memperbesar ukuran icon
                               ),
                             ),
                           ),
