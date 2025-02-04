@@ -382,7 +382,7 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       const Text(
-                        'Foto Dokumentasi:',
+                        'Foto Dokumentasi:  (maks. 4)',
                         style: TextStyle(fontSize: 16),
                       ),
                       const SizedBox(height: 8),

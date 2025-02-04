@@ -14,7 +14,8 @@ class RecapScreen extends StatefulWidget {
   const RecapScreen({
     super.key,
     required this.userId,
-    required this.user, required String namaUser,
+    required this.user,
+    required String namaUser,
   });
 
   @override
@@ -65,12 +66,14 @@ class _RecapScreenState extends State<RecapScreen> {
   void _filterActivities(String query) {
     final filtered = _activities.where((activity) {
       final titleLower = activity.judul.toLowerCase();
+      final authorLower = activity.namaUser.toLowerCase();
       final dateFormatted = DateFormat('EEEE, d MMMM yyyy', 'id_ID')
           .format(activity.tanggal)
           .toLowerCase();
       final searchLower = query.toLowerCase();
 
       return titleLower.contains(searchLower) ||
+          authorLower.contains(searchLower) ||
           dateFormatted.contains(searchLower);
     }).toList();
 
@@ -89,10 +92,15 @@ class _RecapScreenState extends State<RecapScreen> {
             padding: const EdgeInsets.all(8.0),
             child: TextField(
               controller: _searchController,
-              decoration: const InputDecoration(
+              decoration: InputDecoration(
                 labelText: 'Cari catatan',
-                prefixIcon: Icon(Icons.search),
-                border: OutlineInputBorder(),
+                prefixIcon: const Icon(Icons.search),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10.0),
+                  borderSide: const BorderSide(color: Colors.blue, width: 1),
+                ),
+                filled: true,
+                fillColor: Colors.white,
               ),
               onChanged: _filterActivities,
             ),
@@ -110,26 +118,41 @@ class _RecapScreenState extends State<RecapScreen> {
                               .format(activity.tanggal);
 
                       return Card(
-                        child: ListTile(
-                          title: Text(
-                            activity.judul,
-                            style: const TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          subtitle: Text(formattedDate),
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => DetailKegiatanScreen(
-                                  activity: activity,
-                                  user: widget.user,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10.0),
+                          side: const BorderSide(color: Colors.blue, width: 1),
+                        ),
+                        color: Colors.white,
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                activity.judul,
+                                style: const TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
                                 ),
                               ),
-                            );
-                          },
+                              const SizedBox(height: 4),
+                              Text(
+                                'Penulis: ${activity.namaUser}',
+                                style: const TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.normal,
+                                ),
+                              ),
+                              const SizedBox(height: 4),
+                              Text(
+                                formattedDate,
+                                style: const TextStyle(
+                                  fontSize: 14,
+                                  color: Colors.grey,
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       );
                     },

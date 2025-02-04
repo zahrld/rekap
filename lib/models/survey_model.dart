@@ -37,5 +37,16 @@ class Activity {
     );
   }
 
-  Object? toJson() {}
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'judul': judul,
+      'tanggal': tanggal.toIso8601String(),
+      'tempat': tempat,
+      'deskripsi': deskripsi,
+      'anggota': anggota,
+      'images': images,
+      'nama_user': namaUser,
+    };
+  }
 }

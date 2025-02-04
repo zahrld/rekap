@@ -83,10 +83,20 @@ class _CatatanSurveiState extends State<CatatanSurvei> {
             padding: const EdgeInsets.all(8.0),
             child: TextField(
               controller: _searchController,
-              decoration: const InputDecoration(
+              decoration: InputDecoration(
                 labelText: 'Cari catatan',
                 prefixIcon: Icon(Icons.search),
                 border: OutlineInputBorder(),
+                filled: true,
+                fillColor: Colors.white,
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10.0),
+                  borderSide: const BorderSide(color: Colors.blue, width: 1),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10.0),
+                  borderSide: const BorderSide(color: Colors.blue, width: 1),
+                ),
               ),
               onChanged: _filterActivities,
             ),
@@ -111,26 +121,34 @@ class _CatatanSurveiState extends State<CatatanSurvei> {
                           DateFormat('EEEE, d MMMM yyyy', 'id_ID')
                               .format(activity.tanggal);
                       return Card(
-                        child: ListTile(
-                          title: Text(
-                            activity.judul,
-                            style: const TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          subtitle: Text(formattedDate),
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => DetailKegiatanScreen(
-                                  activity: activity,
-                                  user: widget.user,
-                                ),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10.0),
+                          side: const BorderSide(color: Colors.blue, width: 1),
+                        ),
+                        color: Colors.white,
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: ListTile(
+                            title: Text(
+                              activity.judul,
+                              style: const TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
                               ),
-                            );
-                          },
+                            ),
+                            subtitle: Text(formattedDate),
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => DetailKegiatanScreen(
+                                    activity: activity,
+                                    user: widget.user,
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
                         ),
                       );
                     },
