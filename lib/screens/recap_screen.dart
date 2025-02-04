@@ -4,8 +4,8 @@ import 'dart:convert';
 import 'package:intl/intl.dart';
 import 'package:rekap_kominfo/models/user_model.dart';
 import '../config/api_config.dart';
-import '../models/activity_model.dart';
 import 'detail_kegiatan_screen.dart';
+import '../models/survey_model.dart';
 
 class RecapScreen extends StatefulWidget {
   final int userId;
@@ -14,7 +14,7 @@ class RecapScreen extends StatefulWidget {
   const RecapScreen({
     super.key,
     required this.userId,
-    required this.user,
+    required this.user, required String namaUser,
   });
 
   @override
@@ -124,7 +124,7 @@ class _RecapScreenState extends State<RecapScreen> {
                               context,
                               MaterialPageRoute(
                                 builder: (context) => DetailKegiatanScreen(
-                                  activity: Activity,
+                                  activity: activity,
                                   user: widget.user,
                                 ),
                               ),

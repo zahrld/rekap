@@ -25,28 +25,6 @@ class _HomeScreenState extends State<HomeScreen> {
   bool isKalenderHovered = false;
   int jumlahCatatan = 0;
 
-  @override
-  void initState() {
-    super.initState();
-    _getJumlahCatatan();
-  }
-
-  Future<void> _getJumlahCatatan() async {
-    try {
-      final response = await http.get(
-        Uri.parse('https://api.example.com/catatan/jumlah/${widget.user.id}'),
-      );
-
-      if (response.statusCode == 200) {
-        final data = jsonDecode(response.body);
-        setState(() {
-          jumlahCatatan = data['jumlah'] ?? 0;
-        });
-      }
-    } catch (e) {
-      print('Error getting jumlah catatan: $e');
-    }
-  }
 
   @override
   Widget build(BuildContext context) {

@@ -1,7 +1,7 @@
 class ApiConfig {
   // Untuk Android Emulator gunakan 10.0.2.2
   // Untuk iOS Simulator gunakan localhost
-  static const String baseUrl = "http://localhost/api_sicap";
+  static const String baseUrl = "http://192.168.96.162/apiSicap";
 
   // Endpoints
   static const String login = "$baseUrl/login.php";
@@ -12,6 +12,4 @@ class ApiConfig {
   static const String getCatatan = "$baseUrl/get_catatan.php";
   static const String recapScreen = "$baseUrl/read_catatan.php";
   static const String getUserCatatan = "$baseUrl/get_user_catatan.php";
-  static const String getCountUserCatatan =
-      "$baseUrl/get_count_user_catatan.php";
 }
