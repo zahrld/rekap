@@ -1,7 +1,8 @@
 class ApiConfig {
   // Untuk Android Emulator gunakan 10.0.2.2
   // Untuk iOS Simulator gunakan localhost
-  static const String baseUrl = "http://192.168.5.167/api_sicap";
+  static const String baseUrl = "http://192.168.96.162/apiSicap";
+  static const String imageUrl = "$baseUrl/image_upload";
 
   // Endpoints
   static const String login = "$baseUrl/login.php";
