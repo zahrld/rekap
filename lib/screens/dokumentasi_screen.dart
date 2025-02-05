@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:rekap_kominfo/config/api_config.dart';
+import '../config/api_config.dart';
 
 class DokumentasiScreen extends StatelessWidget {
   final List<String> images;
@@ -8,8 +8,6 @@ class DokumentasiScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var isEmptyImages = images.where((str) => str.isEmpty).length;
-    print(isEmptyImages);
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -20,8 +18,8 @@ class DokumentasiScreen extends StatelessWidget {
         elevation: 0,
         iconTheme: const IconThemeData(color: Color(0xFF396BB5)),
       ),
-      body: (isEmptyImages >0)
-          ? Center(child: Text("Tidak ada dokumentasi"))
+      body: images.isEmpty
+          ? const Center(child: Text("Tidak ada dokumentasi"))
           : GridView.builder(
               padding: const EdgeInsets.all(16),
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -32,13 +30,16 @@ class DokumentasiScreen extends StatelessWidget {
               ),
               itemCount: images.length,
               itemBuilder: (context, index) {
+                // Buat URL lengkap untuk gambar
+                final imageUrl = '${ApiConfig.imageUrl}/${images[index].trim()}';
+                print('Loading image from: $imageUrl'); // Debug URL
+
                 return GestureDetector(
                   onTap: () {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) =>
-                            FullScreenImage(imageUrl: '${ApiConfig.baseUrl}/${images[index]}'),
+                        builder: (context) => FullScreenImage(imageUrl: imageUrl),
                       ),
                     );
                   },
@@ -50,7 +51,7 @@ class DokumentasiScreen extends StatelessWidget {
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(8),
                       child: Image.network(
-                        '${ApiConfig.baseUrl}/${images[index]}',
+                        imageUrl,
                         fit: BoxFit.cover,
                         loadingBuilder: (context, child, loadingProgress) {
                           if (loadingProgress == null) return child;
@@ -64,6 +65,7 @@ class DokumentasiScreen extends StatelessWidget {
                           );
                         },
                         errorBuilder: (context, error, stackTrace) {
+                          print('Error loading image: $error'); // Debug error
                           return Container(
                             color: Colors.grey[200],
                             child: const Center(
@@ -114,6 +116,7 @@ class FullScreenImage extends StatelessWidget {
               );
             },
             errorBuilder: (context, error, stackTrace) {
+              print('Error loading full screen image: $error'); // Debug error
               return const Center(
                 child: Icon(Icons.error, color: Colors.white),
               );

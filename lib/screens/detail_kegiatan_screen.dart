@@ -14,7 +14,6 @@ class DetailKegiatanScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print('Debug - Nama User: ${activity.namaUser}');
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -65,7 +64,7 @@ class DetailKegiatanScreen extends StatelessWidget {
             ),
             const SizedBox(height: 20),
 
-// Tombol Dokumentasi
+            // Tombol Dokumentasi
             Center(
               child: ElevatedButton.icon(
                 onPressed: () {
@@ -73,8 +72,7 @@ class DetailKegiatanScreen extends StatelessWidget {
                     context,
                     MaterialPageRoute(
                       builder: (context) => DokumentasiScreen(
-                        images:
-                            activity.images ?? [], // Kirim empty list jika null
+                        images: activity.images ?? [],
                       ),
                     ),
                   );
@@ -229,31 +227,6 @@ class DetailKegiatanScreen extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 20),
-
-            // Info pembuat catatan
-            Container(
-              width: double.infinity,
-              padding: const EdgeInsets.all(12),
-              decoration: BoxDecoration(
-                color: Colors.grey[100],
-                borderRadius: BorderRadius.circular(8),
-                border: Border.all(color: const Color(0xFF396BB5)),
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Icon(Icons.person, size: 16, color: Color(0xFF396BB5)),
-                  const SizedBox(width: 8),
-                  Text(
-                    'Dibuat oleh: ${activity.namaUser}',
-                    style: const TextStyle(
-                      fontSize: 14,
-                      color: Color(0xFF396BB5),
-                    ),
-                  ),
-                ],
-              ),
-            ),
           ],
         ),
       ),
