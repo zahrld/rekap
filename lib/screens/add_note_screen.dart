@@ -52,16 +52,24 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
     if (kIsWeb) {
       final XFile? image = await picker.pickImage(source: ImageSource.gallery);
       if (image != null) {
-        setState(() {
-          _imageFiles.add(image);
-        });
+        if (_imageFiles.length < 4) {
+          setState(() {
+            _imageFiles.add(image);
+          });
+        } else {
+          _showMaxImagesWarning();
+        }
       }
     } else {
       final List<XFile> images = await picker.pickMultiImage();
       if (images.isNotEmpty) {
-        setState(() {
-          _imageFiles.addAll(images);
-        });
+        if (_imageFiles.length + images.length <= 4) {
+          setState(() {
+            _imageFiles.addAll(images);
+          });
+        } else {
+          _showMaxImagesWarning();
+        }
       }
     }
   }
@@ -103,6 +111,27 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
         _anggotaController.clear();
       });
     }
+  }
+
+  void _showMaxImagesWarning() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Peringatan'),
+          content: const Text('Foto dokumentasi melebihi batas (maks. 4)!'),
+          backgroundColor: Colors.white,
+          actions: <Widget>[
+            TextButton(
+              child: const Text('OK'),
+              onPressed: () {
+                Navigator.of(context).pop(); // Menutup dialog
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 
   Widget _buildImagePreview() {

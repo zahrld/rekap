@@ -75,7 +75,7 @@ class _CatatanSurveiState extends State<CatatanSurvei> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Catatan Survei Saya'),
+        title: const Text('Catatan Kegiatan Saya'),
       ),
       body: Column(
         children: [
